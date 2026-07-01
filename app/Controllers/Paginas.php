@@ -14,6 +14,12 @@ class Paginas extends Controller{
         ];
         $this->view('paginas/sobre', $dados);
     }//fim da função sobre
+    public function contato(){
+        $dados = ['titulo'=>"Contato",
+                  'descricao'=>"Página de Contatos"
+        ];
+        $this->view('paginas/contato', $dados);
+    }//fim da função sobre
 
 }//fim da classe Paginas
 
