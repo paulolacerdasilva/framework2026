@@ -1,9 +1,15 @@
 <?php
 include '../app/configuracao.php';
-include '../app/Libraries/Rota.php';
-include '../app/Libraries/Controller.php';
-include '../app/Libraries/Database.php';
+include '../app/Autoload.php';
+
 $db = new Database;
+/*
+$db->query("SELECT * FROM posts");
+
+foreach($db->resultados() as $post){
+    echo $post->titulo.'<br>';
+}
+
 $db->query("SELECT * FROM posts ORDER BY id DESC");
 $db->resultado();
 echo $db->resultado()->titulo;
