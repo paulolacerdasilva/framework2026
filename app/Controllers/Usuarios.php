@@ -1,9 +1,15 @@
 <?php
 class Usuarios extends Controller{
     public function cadastrar(){
-        echo $_POST['nome'];
-        echo $_POST['email'];
-        echo $_POST['senha'];
+        $formulario = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+        if(isset($formulario)):
+            $dados[
+                'nome' => trim($formulario['nome']),
+                'email' =>trim($formulario['email']),
+                'senha' =>trim($formulario['senha']),
+                'confirma_senha' =>trim($formulario['confirma_senha'])
+            ];
+            var_dump($formulario);
         
         $this->view('usuarios/cadastrar');
     }
