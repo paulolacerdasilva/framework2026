@@ -1,5 +1,10 @@
 <?php
 class Usuarios extends Controller{
+
+ public function __construct()
+    {
+        $this->usuarioModel = $this->model('Usuario');
+    }
     
      public function cadastrar()
     {
@@ -13,7 +18,7 @@ class Usuarios extends Controller{
                 'confirma_senha' => trim($formulario['confirma_senha']),
             ];
 
-            if (in_array("", $formulario)) :
+            if (in_array("", $formulario)):
 
                 if (empty($formulario['nome'])) :
                     $dados['nome_erro'] = 'Preencha o campo nome';
@@ -46,8 +51,7 @@ class Usuarios extends Controller{
                     $dados['senha'] = password_hash($formulario['senha'], PASSWORD_DEFAULT);
 
                     if ($this->usuarioModel->armazenar($dados)) :
-                        Sessao::mensagem('usuario', 'Cadastro realizado com sucesso');
-                        URL::redirecionar('usuarios/login');
+                        echo 'cadastro realizado com sucesso';
                     else :
                         die("Erro ao armazenar usuario no banco de dados");
                     endif;
