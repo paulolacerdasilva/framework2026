@@ -15,4 +15,4 @@ class checa{
         return false;
       endif;
     }//fim da função checarEmail
-}//fim da classe
+}//fim da classe Checa

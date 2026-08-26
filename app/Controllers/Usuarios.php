@@ -1,12 +1,14 @@
 <?php
-class Usuarios extends Controller{
 
- public function __construct()
+class Usuarios extends Controller
+{
+
+    public function __construct()
     {
         $this->usuarioModel = $this->model('Usuario');
     }
-    
-     public function cadastrar()
+
+    public function cadastrar()
     {
 
         $formulario = filter_input_array(INPUT_POST, FILTER_SANITIZE_SPECIAL_CHARS);
@@ -18,7 +20,7 @@ class Usuarios extends Controller{
                 'confirma_senha' => trim($formulario['confirma_senha']),
             ];
 
-            if (in_array("", $formulario)):
+            if (in_array("", $formulario)) :
 
                 if (empty($formulario['nome'])) :
                     $dados['nome_erro'] = 'Preencha o campo nome';
@@ -51,7 +53,8 @@ class Usuarios extends Controller{
                     $dados['senha'] = password_hash($formulario['senha'], PASSWORD_DEFAULT);
 
                     if ($this->usuarioModel->armazenar($dados)) :
-                        echo 'cadastro realizado com sucesso';
+                        Sessao::mensagem('usuario', 'Cadastro realizado com sucesso');
+                        URL::redirecionar('usuarios/login');
                     else :
                         die("Erro ao armazenar usuario no banco de dados");
                     endif;
@@ -77,35 +80,69 @@ class Usuarios extends Controller{
         $this->view('usuarios/cadastrar', $dados);
     }
 
-    public function login(){
+    public function login()
+    {
+
         $formulario = filter_input_array(INPUT_POST, FILTER_SANITIZE_SPECIAL_CHARS);
-        if(isset($formulario)):
+        if (isset($formulario)) :
             $dados = [
                 'email' => trim($formulario['email']),
                 'senha' => trim($formulario['senha']),
             ];
-            if(in_array("",$formulario)):
-                if(empty($formulario['email'])):
-                    $dados['email_erro'] = "Preencha o campo email";
+
+            if (in_array("", $formulario)) :
+
+                if (empty($formulario['email'])) :
+                    $dados['email_erro'] = 'Preencha o campo e-mail';
                 endif;
-                if(empty($formulario['senha'])):
-                    $dados['senha_erro'] = "Preencha o campo senha";
+
+                if (empty($formulario['senha'])) :
+                    $dados['senha_erro'] = 'Preencha o campo senha';
                 endif;
-            else:
-                if(Checa::checarEmail($formulario['email'])):
-                    $dados['email_erro'] = 'O email é inválido';
-                else:
+
+            else :
+                if (Checa::checarEmail($formulario['email'])) :
+                    $dados['email_erro'] = 'O e-mail informado é invalido';
+                else :
+                   
                     $usuario = $this->usuarioModel->checarLogin($formulario['email'], $formulario['senha']);
 
-                    if($usuario):
+                    if($usuario): 
                         $this->criarSessaoUsuario($usuario);
                     else:
-                        echo 'Não foi possível realizar o login';
+                        Sessao::mensagem('usuario','Usuario ou senha invalidos','alert alert-danger');
                     endif;
+
                 endif;
-            else:
-     $this->view('usuarios/login');
-    }//fim da função login
+
+            endif;
+        else :
+            $dados = [
+                'email' => '',
+                'senha' => '',
+                'email_erro' => '',
+                'senha_erro' => ''
+            ];
+
+        endif;
+        $this->view('usuarios/login', $dados);
+    }
+    private function criarSessaoUsuario($usuario){
+        $_SESSION['usuario_id'] = $usuario->id;
+        $_SESSION['usuario_nome'] = $usuario->nome;
+        $_SESSION['usuario_email'] = $usuario->email;
+
+        URL::redirecionar('posts');
+    }
 
 
-}//fim da classe Usuario
+    public function sair(){
+        unset($_SESSION['usuario_id']);
+        unset($_SESSION['usuario_nome']);
+        unset($_SESSION['usuario_email']);
+
+        session_destroy();
+        
+        URL::redirecionar('usuarios/login');
+    }
+}
