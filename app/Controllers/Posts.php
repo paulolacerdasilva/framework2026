@@ -8,7 +8,11 @@ class Posts extends Controller{
         $this->usuarioModel = $this->model('Usuario');
     }
     public function index(){
-        $this->view('posts/index');
+        $dados = [
+            'posts'=>$this->postModel->lerPosts()
+        ];
+
+        $this->view('posts/index', $dados);
     }
        public function cadastrar()
     {
@@ -51,5 +55,14 @@ class Posts extends Controller{
         endif;
 
         $this->view('posts/cadastrar', $dados);
+    }
+    public function ver($id){
+        $post = $this->postModel->lerPostPorId($id);
+        $usuario = $this->usuarioModel->lerUsuarioPorId($post->usuario_id);
+        $dados=[
+            'post'->$post,
+            'usuario'->$usuario
+        ];
+        $this->view('posts/ver', $dados);
     }
 }//fim da classe Posts

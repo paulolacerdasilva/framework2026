@@ -4,6 +4,7 @@ class Post{
     public function __construct(){
         $this->db = new Database();
     }// fim do construtor
+
      public function armazenar($dados)
     {
         $this->db->query("INSERT INTO posts(usuario_id, titulo, texto) VALUES (:usuario_id, :titulo, :texto)");
@@ -18,4 +19,24 @@ class Post{
             return false;
         endif;
     }
+
+    public function lerPosts(){
+        $this->db->query("SELECT *, 
+        posts.id as postID,
+        posts.criado_em as postDataCadastro,
+        usuarios.id as usuarioId,
+        usuarios.criado_em as usuarioDataCadastro
+        FROM posts
+        INNER JOIN usuarios ON 
+        posts.usuario_id = usuarios.id 
+        ORDER BY posts.id DESC
+        ");
+        return $this->db->resultados();
+    }
+
+    public function lerPostPorId($id){
+        $this->db->query("SELECT * FROM posts WHERE id =:id ");
+        $this->db->bind('id', $id);
+        return $this->db->resultado();
+    }//fim da função lerPostPorId
 }//fim da classe Post
