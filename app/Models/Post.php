@@ -22,7 +22,7 @@ class Post{
 
     public function lerPosts(){
         $this->db->query("SELECT *, 
-        posts.id as postID,
+        posts.id as postId,
         posts.criado_em as postDataCadastro,
         usuarios.id as usuarioId,
         usuarios.criado_em as usuarioDataCadastro

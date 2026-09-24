@@ -56,13 +56,16 @@ class Posts extends Controller{
 
         $this->view('posts/cadastrar', $dados);
     }
-    public function ver($id){
+      public function ver($id)
+    {
         $post = $this->postModel->lerPostPorId($id);
         $usuario = $this->usuarioModel->lerUsuarioPorId($post->usuario_id);
-        $dados=[
-            'post'->$post,
-            'usuario'->$usuario
+
+        $dados = [
+            'post' => $post,
+            'usuario' => $usuario
         ];
+
         $this->view('posts/ver', $dados);
     }
 }//fim da classe Posts
