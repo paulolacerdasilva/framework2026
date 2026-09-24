@@ -15,9 +15,7 @@
                 <p class="card-text"><?= $dados['post']->texto ?></p>
             </div>
             <div class="card-footer text-muted">
-                <small>
-                    Escrito por: <b><?= $dados['usuario']->nome ?></b> em <i><?= Checa::dataBr($dados['post']->criado_em) ?></i>
-                </small>
+                <small>Escrito por: <b><?=$post->nome ?></b> em <i><?=Checa::dataBr($post->postDataCadastro)?></i></small>
             </div>
 
             <?php if ($dados['post']->usuario_id == $_SESSION['usuario_id']) : ?>
